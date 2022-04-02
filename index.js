@@ -1,11 +1,11 @@
 const express = require('express');
+require('./services/passport');
 
 const app = express();
 
-app.get("/", (req, res)=>{
+require('./routes/authRoutes')(app);
 
-    res.send({ hi: 'here' });
+const PORT = process.env.PORT || 5001;
 
-});
-const PORT = process.env.PORT || 5000;
 app.listen(PORT);
+
