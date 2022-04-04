@@ -15,7 +15,7 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(function(id, done) {
   User.findById(id)
     .then(user =>{
-      download(null, user);
+      done(null, user);
     });
 });
 
