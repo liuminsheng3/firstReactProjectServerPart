@@ -9,6 +9,7 @@ const { download } = require('express/lib/response');
 const User = mongoose.model("users");
 
 passport.serializeUser((user, done) => {
+  console.log("serialize",user);
   done(null, user.id);
 });
 
