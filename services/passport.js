@@ -4,7 +4,8 @@ const keys = require('../config/keys');
 const HttpsProxyAgent = require('https-proxy-agent');
 const agent = new HttpsProxyAgent(process.env.HTTP_PROXY || "http://127.0.0.1:8889");
 const mongoose = require('mongoose');
-const { download } = require('express/lib/response');
+
+
 
 const User = mongoose.model("users");
 
@@ -48,5 +49,14 @@ const  gStrategy =  new GoogleStrategy(
        })
     }
   );
-gStrategy._oauth2.setAgent(agent);
-passport.use(gStrategy);
+
+if(process.env.NODE_ENV === 'production'){
+  
+  passport.use(gStrategy);
+
+} else{
+  
+  gStrategy._oauth2.setAgent(agent);
+  passport.use(gStrategy);
+    
+}
