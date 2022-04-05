@@ -25,7 +25,8 @@ const  gStrategy =  new GoogleStrategy(
     {
       clientID: keys.googleClientID,
       clientSecret: keys.googleClientSecret,
-      callbackURL: '/auth/google/callback'
+      callbackURL: '/auth/google/callback',
+      proxy: true
     },
     //user has successfully signed in on google.
     (accessToken, refreshToken, profile, done) => {
@@ -55,7 +56,7 @@ if(process.env.NODE_ENV === 'production'){
   passport.use(gStrategy);
 
 } else{
-  
+
   gStrategy._oauth2.setAgent(agent);
   passport.use(gStrategy);
     
