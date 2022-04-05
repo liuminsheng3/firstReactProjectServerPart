@@ -104,4 +104,4 @@ dist
 .tern-port
 
 #google api keys
-keys.js
+dev.js
