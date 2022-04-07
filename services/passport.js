@@ -2,7 +2,6 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const keys = require('../config/keys');
 const HttpsProxyAgent = require('https-proxy-agent');
-const agent = new HttpsProxyAgent(process.env.HTTP_PROXY || "http://127.0.0.1:8889");
 const mongoose = require('mongoose');
 
 
@@ -56,7 +55,7 @@ if(process.env.NODE_ENV === 'production'){
   passport.use(gStrategy);
 
 } else{
-
+  const agent = new HttpsProxyAgent(process.env.HTTP_PROXY || "http://127.0.0.1:8889");
   gStrategy._oauth2.setAgent(agent);
   passport.use(gStrategy);
     
