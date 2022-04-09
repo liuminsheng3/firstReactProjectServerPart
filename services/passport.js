@@ -13,12 +13,11 @@ passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
-passport.deserializeUser(function(id, done) {
-  User.findById(id)
-    .then(user =>{
-      done(null, user);
-    });
-});
+passport.deserializeUser(async function(id, done) {
+  const user = await User.findById(id);
+  done(null, user);
+  }
+);
 
 const  gStrategy =  new GoogleStrategy(
     {
@@ -28,25 +27,26 @@ const  gStrategy =  new GoogleStrategy(
       proxy: true
     },
     //user has successfully signed in on google.
-    (accessToken, refreshToken, profile, done) => {
+    async (accessToken, refreshToken, profile, done) => {
       console.log("successfully login on google!");
-      User.findOne({googleID: profile.id})
-       .then((existingUser) => {
-          if(existingUser){
-            //we already have a record with the given ID
-            console.log("this user already has an account");
-            console.log(existingUser);
+      
+      const existingUser = await User.findOne({googleID: profile.id})
 
-            done(null, existingUser);
-          }else{
-            //we don't have a user record with this ID,
-            //make a new user
-            console.log("this user doesn't have an account, create new one!");
-            new User({googleID: profile.id}).save()
-              .then(user => done(null, user));
+      if(existingUser){
+        //we already have a record with the given ID
+        console.log("this user already has an account");
+        console.log(existingUser);
 
-          }
-       })
+        done(null, existingUser);
+      }else{
+        //we don't have a user record with this ID,
+        //make a new user
+        console.log("this user doesn't have an account, create new one!");
+        
+        const user = await new User({googleID: profile.id}).save();
+
+        done(null, user);
+      }
     }
   );
 
