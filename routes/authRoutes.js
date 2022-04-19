@@ -11,17 +11,27 @@ module.exports = (app) => {
     );
     
   // when google auth successed, and return to this url.
-  app.get('/auth/google/callback', passport.authenticate('google'));
+  app.get(
+    '/auth/google/callback', 
+    passport.authenticate('google'),
+    (req, res) =>{
+      res.redirect('/surveys');
+    }
+  );
 
   //handle when user use cookie info to request data.
   app.get('/api/current_user', (req, res) => {
-
     res.send(req.user);
+
   });
 
   //log out
-  app.get('/api/logout', (req, res) =>{
-    req.logout();
-    res.send("you have successfully logged out");
-  });
+  app.get(
+    '/api/logout', 
+    (req, res) =>{
+      req.logout();
+      res.redirect('/'); 
+
+    }
+  );
 }
